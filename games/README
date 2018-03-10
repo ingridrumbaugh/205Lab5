@@ -1,0 +1,118 @@
+CS 205 L : Software Engineering
+Ingrid Rumbaugh
+Trisha Agarwal
+February 12, 2018
+
+TEST PLAN - Tokens
+
+
+Moves
+Methods:
+8 methods to move the tokens in the 8 major directions
+Move token more than 1 space at a time
+The methods should check that the token is valid before moving the tokens
+Each method checks data such that
+the move is valid
+move off the board
+move into trash or needs to respond to other tokens depending on what the token is
+Test: Each method will be tested with the following inputs
+Valid input
+Move off the board
+Move into the wall
+Move requiring response from different player
+Move on a piece that has been taken off the board which should not be possible
+Add & Remove from Play
+Methods:
+Each token should be able to add itself to the board
+Each token should be able to remove itself from the board
+Adding or removing the tokens should change the status of the token
+Test:
+Check the state of the token to see that it accurately reflects whether it has been added or not
+Check that a token that has been removed cannot be moved
+Check that a token that is on the board can be moved
+Kind of Token and Responding to Neighbours
+Methods:
+Each token should  be able to identify itself by the index using enum
+Each token will respond to its neighbours according to its privileges
+ Each token should know its location on the board
+Store a history of upto last 5 moves made if the token has to fall back
+Tests:
+Check that the tokens identify themselves correctly
+Check that the tokens respond to surroundings correctly. For example, robot hitting robot creates trash but the human now has to be aware of this trash because it might kill the human.
+Check that the token returns the location correctly
+Falling back to upto 5 moves
+Trying to fall back to more than 5 moves
+
+
+
+TEST PLAN - Gameboard
+
+Turns (play_turn, turn_count)
+Methods: (FOR EACH ACTION, CHECK STATUS FROM METHOD IN TOKEN)
+Play turn: Execute turn
+If direction you’re moving in is not occupied
+Update location of token
+Allowed to play: Is the object allowed to move (play a turn)
+Objects are not allowed to move when the other player is executing a turn.
+Check surroundings: front, left, right, back occupied or not.
+Set boolean for each. If Left is false, player cannot move there.
+Location: Where each player and token is on the board & where the object is moving
+Assign turn: Alternate turns for each player
+Who’s turn: Who’s turn is it.
+Turn count: Count number of turns for each player
+Tests:
+Make sure that an error is thrown when you try to move onto a space that’s already occupied
+Make sure that an error is thrown when you try to move more than one space at a time
+Place objects all around the token and make sure that the surroundings booleans are all false.
+Move a token and check that the location is correctly updated
+Make sure that an error is thrown when player 1 tries to move 2 turns in a row.
+Have each player play 3 turns and make sure that the turn count is accurate.
+Game Status (check_score, game_finished, game_count, game_statistics, restart_game, clear_board)
+Methods:
+Check location: At a specific location, what is there.
+Game count: number of games played with the current instance
+Check score: return number of robot or trash tokens remaining
+Add to score: increase score for each player
+Decrease / Increase tokens: calculate # of each token remaining for each player
+Game status: what action (if any) is being performed. Using boolean isMoving.
+Game finished: boolean, is game done or not
+Game_statistics: keep track of info over several games
+Who’s won, score, # turns/player, how many games/instance, how many instances
+Restart game: reset everything
+Check game status: If isMoving is false, then the game can be restarted
+Destroy instance of game and create a new one
+Reset score
+Boolean game finished is false for new instance
+Print prev game statistics for the user
+Clear board:
+Reset all locations
+Reset tokens to standard number
+Tests:
+Check array at beginning of game and after a token has been moved. Throw an error if check location shows that the token hasn’t been moved.
+Play multiple games with the current instance and check that the number matches. Then delete the instance and check that the game count is 0 again.
+Add robot tokens, make them collide to create trash, and check that this is reflected in the check score method. Then delete the trash and check that the score changes for that as well. Also check that the # of tokens increases after this happens.
+Make a token move forward and while that is happening, print isMoving (game status) to the command line. Make sure that while the event is happening, isMoving is true
+Start a game and then call destructor and print status of game finished boolean during this to make sure that it is false until the destructor is called.
+Play a test game and once the destructor is called, print the game statistics to a file and to the command line. Ensure that all info is correct.
+Create a game, move some tokens and create new ones. Then call restart game. Check that instance of game is destroyed and a new one is created. Check that score is reset and that game finished boolean is accurate.
+Create an instance of game, move some tokens around and add tokens, etc. Then call reset board. Ensure that all tokens have been placed back in the default location, there is a standard # of robots and no trash, and that the score is rest to 0. Also the number of games played with that instance should increment.
+Tokens (add_token, perform_token_action)
+Methods:
+Add token: Types: Robot, Trash, Wall (cannot have more than 2 players)
+Create new instance of specified type.
+For robot and trash, specify x,y location
+For wall, specify space occupied (xstart, ystart, xend, yend)
+Number of tokens: Keep track of # of each token.
+Additional Perform_Token_Action Options:
+Remove trash, wall, robot: Call destructor of instance of that type
+Respond to neighbors: Check left right front back spaces to see which are available. (See Turns).
+What are you: Use enum to identify all tokens.
+Tests:
+Add a new instance of each type and test that an error is thrown if more than 2 players are added, an error is thrown.
+A wall cannot be added along the whole length/width of the board - check that an error is thrown if this is tested.
+Call destructor for tokens, check that # of each token is updated and that the location is removed.
+Try to delete all tokens, see if an error is thrown. There needs to be at least two tokens on the board at any time.
+Create tokens and move them around the board (except the trash). Use find at location method to check functionality to know where tokens are:
+Respond to neighbors and see what is at a specific location (Give location, return item) + (Give item, return location)
+Check what are you method: Create instances of each and check return type.
+
